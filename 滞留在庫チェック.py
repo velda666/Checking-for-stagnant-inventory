@@ -13,7 +13,7 @@ from tkinter import messagebox
 import threading
 
 # Application version
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.0.1"
 APP_NAME = "滞留在庫チェック"
 
 # -----------------------------------------------------------------------------
@@ -229,8 +229,8 @@ def create_print_sheet(workbook, employee_name, sorted_df, month_input):
             cell.border = border
 
     # Column widths
-    # Fixed widths: A/E/F = 100px → 13.57, D = 145px → 20.0, K/L = 185px → 25.71
-    fixed_widths = {'A': 13.57, 'D': 20.0, 'E': 13.57, 'F': 13.57, 'K': 25.71, 'L': 25.71}
+    # Fixed widths: A/B/E/F = 100px → 13.57, D = 145px → 20.0, K/L = 185px → 25.71
+    fixed_widths = {'A': 13.57, 'B': 13.57, 'D': 20.0, 'E': 13.57, 'F': 13.57, 'K': 25.71, 'L': 25.71}
     for col_idx, col_name in enumerate(print_columns, start=1):
         col_letter = get_column_letter(col_idx)
         if col_letter in fixed_widths:
