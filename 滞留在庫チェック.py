@@ -13,7 +13,7 @@ from tkinter import messagebox
 import threading
 
 # Application version
-APP_VERSION = "1.0.1"
+APP_VERSION = "1.0.2"
 APP_NAME = "滞留在庫チェック"
 
 # -----------------------------------------------------------------------------
@@ -675,26 +675,30 @@ class MainGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("未出荷在庫・受注残 データ処理")
-        self.root.geometry("400x380")
+        self.root.geometry("400x320")
 
-        # 日数選択の設定
-        tk.Label(root, text="入荷日の条件を選択してください：", font=("Arial", 12)).pack(pady=20)
-        
-        self.days_var = tk.StringVar()
-        self.days_var.set("90")  # デフォルト値
-        
-        days_frame = tk.Frame(root)
-        days_frame.pack(pady=10)
-        
-        days_options = ["30", "60", "90", "120", "150", "180"]
-        for i, days in enumerate(days_options):
-            if i % 3 == 0:
-                row_frame = tk.Frame(days_frame)
-                row_frame.pack()
-            
-            rb = tk.Radiobutton(row_frame, text=f"{days}日以上前", variable=self.days_var, 
-                              value=days, font=("Arial", 10))
-            rb.pack(side=tk.LEFT, padx=10)
+        # 日数入力の設定
+        tk.Label(root, text="滞留日数を入力してください（日）：", font=("Arial", 12)).pack(pady=20)
+
+        self.days_var = tk.StringVar(value="90")  # デフォルト値
+
+        # 半角数字(0-9)のみ許可するバリデーション（全角数字はisdigit()でTrueになるため明示チェック）
+        vcmd = (root.register(lambda val: all(c in '0123456789' for c in val)), '%P')
+
+        days_entry_frame = tk.Frame(root)
+        days_entry_frame.pack(pady=5)
+        self.days_entry = tk.Entry(
+            days_entry_frame,
+            textvariable=self.days_var,
+            validate='key',
+            validatecommand=vcmd,
+            font=("Arial", 12),
+            width=8,
+            justify='center'
+        )
+        self.days_entry.pack(side=tk.LEFT)
+        tk.Label(days_entry_frame, text="日以上前", font=("Arial", 12)).pack(side=tk.LEFT, padx=5)
+        tk.Label(root, text="※ 半角数字で入力してください", font=("Arial", 9), fg="gray").pack()
         
         # 月度入力欄
         tk.Label(root, text="月度を入力してください：", font=("Arial", 11)).pack(pady=(10, 0))
@@ -717,12 +721,19 @@ class MainGUI:
             messagebox.showwarning("入力エラー", "月度を入力してください。")
             return
 
+        # 滞留日数のバリデーション
+        days_str = self.days_var.get().strip()
+        if not days_str:
+            messagebox.showwarning("入力エラー", "滞留日数を入力してください。")
+            return
+        days = int(days_str)
+        if days < 1:
+            messagebox.showwarning("入力エラー", "滞留日数は1以上の数値を入力してください。")
+            return
+
         # ボタンを無効化
         self.execute_button.config(state="disabled")
         self.progress_label.config(text="処理を開始しています...")
-
-        # 選択された日数を取得
-        days = int(self.days_var.get())
 
         # 別スレッドで処理を実行
         thread = threading.Thread(target=self.run_processing, args=(days, month_input))
