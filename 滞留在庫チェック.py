@@ -13,7 +13,7 @@ from tkinter import messagebox
 import threading
 
 # Application version
-APP_VERSION = "1.0.2"
+APP_VERSION = "1.0.3"
 APP_NAME = "滞留在庫チェック"
 
 # -----------------------------------------------------------------------------
@@ -274,8 +274,8 @@ def process_data(days_threshold, month_input, progress_callback=None):
     # ファイルパスの定義
     nyuka_patterns = [
         r"C:\Users\[username]\OneDrive - 東邦ヤンマーテック株式会社\CR推進本部フォルダ\06_社内管理資料\miraimiru移行関連\フォルダ共有テスト\入荷実績\【標準】_入荷.csv",
-        r"C:\Users\Yamaoka_Masanobu\東邦ヤンマーテック株式会社\CR推進本部フォルダ\06_社内管理資料\miraimiru移行関連\フォルダ共有テスト\入荷実績\【標準】_入荷.csv",
-        r"C:\Users\Yamaoka_Masanobu\東邦ヤンマーテック株式会社\CR推進本部 - CR推進本部フォルダ\06_社内管理資料\miraimiru移行関連\フォルダ共有テスト\入荷実績\【標準】_入荷.csv"
+        r"C:\Users\[username]\東邦ヤンマーテック株式会社\CR推進本部フォルダ\06_社内管理資料\miraimiru移行関連\フォルダ共有テスト\入荷実績\【標準】_入荷.csv",
+        r"C:\Users\[username]\東邦ヤンマーテック株式会社\CR推進本部 - CR推進本部フォルダ\06_社内管理資料\miraimiru移行関連\フォルダ共有テスト\入荷実績\【標準】_入荷.csv"
     ]
     
     shukka_patterns = [
